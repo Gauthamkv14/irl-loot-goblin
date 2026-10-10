@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { signLoot } from './auth.js';
 
 /**
  * Schema validating the AI model's creative narrative output.
@@ -33,7 +34,8 @@ export const LootCardSchema = z.object({
   ability_description: z.string(),
   lore: z.string(),
   appraisal: z.string(),
-  disclaimer: z.string()
+  disclaimer: z.string(),
+  signature: z.string().optional()
 });
 
 /**
@@ -48,7 +50,7 @@ export function fallbackItem(roll) {
     goblin_value: 5
   };
 
-  return {
+  const item = {
     id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     createdAt: new Date().toISOString(),
     source: 'fallback',
@@ -65,4 +67,7 @@ export function fallbackItem(roll) {
     appraisal: 'Look, I was distracted by a remarkably spherical pebble! But rest assured, this object is undeniably tangible.',
     disclaimer: 'Certified Goblin Appraisal. Fictional RPG item; observe in nature, do not collect or disturb.'
   };
+
+  item.signature = signLoot(item);
+  return item;
 }

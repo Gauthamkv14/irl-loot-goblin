@@ -38,7 +38,15 @@ const RARITY_THEMES = {
   }
 };
 
-export default function LootCard({ item, previewUrl, onReset }) {
+export default function LootCard({
+  item,
+  previewUrl,
+  onReset,
+  onSave,
+  isSaved,
+  isSaving,
+  user
+}) {
   if (!item) return null;
 
   const rarity = item.rarity || 'Common';
@@ -194,12 +202,39 @@ export default function LootCard({ item, previewUrl, onReset }) {
           </p>
         </div>
 
-        {/* Footer Actions: Appraise Another */}
-        <div className="p-4 bg-stone-950/90 border-t border-stone-800 flex justify-center">
+        {/* Footer Actions: Save to Inventory & Appraise Another */}
+        <div className="p-4 bg-stone-950/90 border-t border-stone-800 flex flex-col sm:flex-row gap-3 justify-center">
+          {onSave && (
+            <button
+              type="button"
+              disabled={isSaving || isSaved}
+              onClick={onSave}
+              className={`flex-1 sm:flex-none px-6 py-3 rounded-xl font-bold text-sm transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-lg ${
+                isSaved
+                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-800 cursor-default'
+                  : 'bg-emerald-600 hover:bg-emerald-500 text-stone-950 shadow-emerald-950/50'
+              } disabled:opacity-50`}
+            >
+              {isSaving ? (
+                <>
+                  <span className="animate-spin">🪙</span> Hoarding...
+                </>
+              ) : isSaved ? (
+                <>
+                  <span>✓</span> Saved in Treasury
+                </>
+              ) : (
+                <>
+                  <span>💾</span> {user ? 'Save to Treasury' : 'Sign in to Save'}
+                </>
+              )}
+            </button>
+          )}
+
           <button
             type="button"
             onClick={onReset}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm bg-stone-800 hover:bg-stone-700 text-stone-100 border border-stone-600 transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-lg"
+            className="flex-1 sm:flex-none px-6 py-3 rounded-xl font-bold text-sm bg-stone-800 hover:bg-stone-700 text-stone-100 border border-stone-600 transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-lg"
           >
             <span>🔄</span> Appraise Another Find
           </button>

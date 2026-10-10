@@ -100,6 +100,37 @@ try {
     assert(lootCard.source === 'model' || lootCard.source === 'fallback', 'Unknown source');
   }
 
+  // 6. Test GET /api/leaderboards response structure / error contract
+  console.log('6. Testing GET /api/leaderboards...');
+  const lbRes = await fetch(`${baseUrl}/api/leaderboards`);
+  // If hosted table is missing, backend returns HTTP 500 with descriptive error message without leaking secrets
+  if (lbRes.status === 200) {
+    const lbData = await lbRes.json();
+    assert(Array.isArray(lbData.leaderboard), 'Expected leaderboard array');
+    console.log('✓ /api/leaderboards returned 200 OK with leaderboard array.');
+  } else {
+    assert.strictEqual(lbRes.status, 500);
+    const lbErr = await lbRes.json();
+    assert(lbErr.error && lbErr.error.includes('Failed to load leaderboard'), 'Expected safe leaderboard error');
+    assert(!lbErr.error.includes('eyJ'), 'Error must not leak JWT tokens');
+    console.log('✓ /api/leaderboards safely reported database error without leaking credentials.');
+  }
+
+  // 7. Test GET /api/trades/offers response structure / error contract
+  console.log('7. Testing GET /api/trades/offers...');
+  const toRes = await fetch(`${baseUrl}/api/trades/offers`);
+  if (toRes.status === 200) {
+    const toData = await toRes.json();
+    assert(Array.isArray(toData.offers), 'Expected offers array');
+    console.log('✓ /api/trades/offers returned 200 OK with offers array.');
+  } else {
+    assert.strictEqual(toRes.status, 500);
+    const toErr = await toRes.json();
+    assert(toErr.error && toErr.error.includes('Failed to fetch trade offers'), 'Expected safe trade offers error');
+    assert(!toErr.error.includes('eyJ'), 'Error must not leak JWT tokens');
+    console.log('✓ /api/trades/offers safely reported database error without leaking credentials.');
+  }
+
   console.log('\n🎉 ALL INTEGRATION TESTS PASSED SUCCESSFULLY!');
 } finally {
   server.close();

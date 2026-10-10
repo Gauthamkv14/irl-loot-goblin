@@ -41,9 +41,41 @@ Configure the following environment variables in the Render Dashboard (**Dashboa
 | `PROVIDER_BASE_URL` | `https://openrouter.ai/api/v1` | OpenAI-compatible endpoint base URL. |
 | `PROVIDER_API_KEY` | *(Your private OpenRouter API key)* | Starts with `sk-or-v1-...`. Never commit to Git! |
 | `MODEL_ID` | `dots-studio/dots-3-note-preview:free` | Exact verified free open-weight vision model. |
+| `LOOT_SIGNING_SECRET` | *(Required in Prod)* 64-character hex secret for server-authoritative HMAC signing. | Generate via `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `SUPABASE_URL` | *(Optional for Auth)* Your Supabase project URL for server token verification. | `https://xyzproject.supabase.co` |
+| `SUPABASE_ANON_KEY` | *(Optional for Auth)* Your Supabase anon key for server token verification. | `eyJhbGciOi...` |
+| `SUPABASE_SERVICE_ROLE_KEY` | *(Optional for Progression)* Server-only key to execute private atomic progression RPC. | `eyJhbGciOi...` |
+| `VITE_SUPABASE_URL` | *(Optional for Auth)* Your Supabase project URL for frontend client. | `https://xyzproject.supabase.co` |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | *(Optional for Auth)* Your Supabase publishable/anon key for frontend client. | `eyJhbGciOi...` |
 
 > [!WARNING]
-> Never set `PROVIDER_API_KEY` in client-side Vite variables (`VITE_*`) or commit `.env` files into GitHub. The key must live exclusively in Render's server environment.
+> Never set `PROVIDER_API_KEY`, `LOOT_SIGNING_SECRET`, or `SUPABASE_SERVICE_ROLE_KEY` in client-side Vite variables (`VITE_*`) or commit `.env` files into GitHub. Secrets must live exclusively in Render's server environment. Keep `LOOT_SIGNING_SECRET` stable across redeployments so previously appraised items remain savable.
+
+---
+
+### Supabase Database Migration Setup
+
+1. Open your hosted Supabase project dashboard at [supabase.com](https://supabase.com).
+2. Go to **SQL Editor $\rightarrow$ New Query**.
+3. Apply the migrations in sequence:
+   - `supabase/migrations/20261010000000_initial_schema.sql` (Phase 5 base schema & profiles trigger)
+   - `supabase/migrations/20261011000000_phase6_progression.sql` (Phase 6 base progression tables)
+   - `supabase/migrations/20261011020000_private_rpc_security_remediation.sql` (Private schema `goblin_internal` & atomic progression RPC)
+   - `supabase/migrations/20261011030000_phase7_leaderboards_and_trading.sql` (Phase 7 public profiles, leaderboard view, trade tables, and trading RPCs)
+4. Verify that:
+   - `public.profiles` and `public.loot_items` tables are created with Row Level Security (RLS) enabled.
+   - `profiles` contains `is_public` (defaulting to false) and `public_title`.
+   - `trade_offers` and `trade_history` tables are created with RLS enabled and direct write privileges (`INSERT, UPDATE, DELETE`) revoked from `anon` and `authenticated`.
+   - The trigger `on_auth_user_created` is attached to `auth.users`.
+   - Direct write privileges (`INSERT, UPDATE, DELETE`) on `user_progression`, `daily_quest_progress`, `hunt_progress`, and `user_achievements` are revoked from `anon` and `authenticated`.
+   - The view `public.public_leaderboard_view` exists and filters strictly on `is_public = true`.
+   - The atomic transaction functions `goblin_internal.hoard_relic_atomic`, `goblin_internal.execute_trade_atomic`, and `goblin_internal.cancel_trade_atomic` exist inside `goblin_internal` with `SECURITY DEFINER` and `EXECUTE` granted exclusively to `service_role`.
+
+### PostgREST Exposed Schemas Configuration
+In the Supabase Dashboard:
+- Navigate to **Project Settings $\rightarrow$ API $\rightarrow$ Extra search path / Exposed schemas**.
+- Add `goblin_internal` to the exposed schemas list (alongside `public`).
+- **Security Guarantee:** Because `REVOKE USAGE ON SCHEMA goblin_internal FROM PUBLIC, anon, authenticated;` is enforced in the migration, PostgREST will strictly forbid requests from `anon` or ordinary `authenticated` tokens. Only the Express server client authenticating with `SUPABASE_SERVICE_ROLE_KEY` can access `goblin_internal` to execute `hoard_relic_atomic`, `execute_trade_atomic`, and `cancel_trade_atomic`. Direct browser/client calls remain completely blocked.
 
 ---
 

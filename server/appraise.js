@@ -1,6 +1,7 @@
 import { SYSTEM_PROMPT, FEW_SHOT_EXAMPLES, buildUserPrompt } from './prompt.js';
 import { ModelOutputSchema, fallbackItem } from './schema.js';
 import { rollLoot } from './loot.js';
+import { signLoot } from './auth.js';
 
 /**
  * Strips markdown code fences (e.g. ```json ... ```) from model response string
@@ -168,8 +169,8 @@ export async function appraisePhoto(dataUrl, huntPrompt = null, config) {
     return fallbackItem(roll);
   }
 
-  // Merge server-rolled stats with model narrative
-  return {
+  // Merge server-rolled stats with model narrative and compute HMAC signature
+  const item = {
     id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     createdAt: new Date().toISOString(),
     source: 'model',
@@ -186,4 +187,7 @@ export async function appraisePhoto(dataUrl, huntPrompt = null, config) {
     appraisal: parsedJson.appraisal,
     disclaimer: 'Certified Goblin Appraisal. Fictional RPG item; observe in nature, do not collect or disturb.'
   };
+
+  item.signature = signLoot(item);
+  return item;
 }
