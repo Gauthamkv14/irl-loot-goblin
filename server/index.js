@@ -208,8 +208,9 @@ app.post('/api/inventory/save', async (req, res) => {
 
   // 1. Verify access token with Supabase Auth
   let userId = null;
+  let supabaseServer = null;
   try {
-    const supabaseServer = createClient(supabaseUrl, supabaseKey);
+    supabaseServer = createClient(supabaseUrl, supabaseKey);
     const { data: { user }, error: authError } = await supabaseServer.auth.getUser(token);
 
     if (authError || !user) {
@@ -275,9 +276,11 @@ app.post('/api/inventory/save', async (req, res) => {
     }
 
     // Evaluate potential achievements from current user treasury stats
-    const { data: allLoot } = await userClient
+    const statsClient = (process.env.SUPABASE_SERVICE_ROLE_KEY && supabaseServer) ? supabaseServer : userClient;
+    const { data: allLoot } = await statsClient
       .from('loot_items')
-      .select('rarity');
+      .select('rarity')
+      .eq('user_id', userId);
 
     const totalHoarded = (allLoot?.length || 0) + 1;
     const rarityCounts = {};
@@ -336,6 +339,73 @@ app.post('/api/inventory/save', async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       error: `Failed to save relic to database: ${err.message}`
+    });
+  }
+});
+
+// 3b. Server-authoritative Inventory Retrieval Endpoint
+// Authenticates user via Supabase JWT, retrieves user-isolated treasury relics
+app.get('/api/inventory', async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({
+      error: 'Unauthorized. An authentication token is required to view your treasury.'
+    });
+  }
+
+  const token = authHeader.split(' ')[1];
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseKey = serviceRoleKey || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    return res.status(503).json({
+      error: 'Database service is currently unconfigured on the server.'
+    });
+  }
+
+  try {
+    const authClient = createClient(supabaseUrl, supabaseKey);
+    const { data: { user }, error: authError } = await authClient.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({
+        error: 'Invalid or expired authentication session. Please sign in again.'
+      });
+    }
+
+    // Query inventory items isolated strictly to the authenticated user
+    const dbClient = serviceRoleKey
+      ? createClient(supabaseUrl, serviceRoleKey)
+      : createClient(supabaseUrl, supabaseKey, {
+          global: {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        });
+
+    const { data: items, error: fetchError } = await dbClient
+      .from('loot_items')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (fetchError) {
+      console.error('Error fetching inventory:', fetchError);
+      return res.status(500).json({
+        error: 'Failed to retrieve inventory from treasury.'
+      });
+    }
+
+    return res.json({
+      ok: true,
+      items: items || []
+    });
+  } catch (err) {
+    console.error('Unexpected error fetching inventory:', err);
+    return res.status(500).json({
+      error: 'Failed to retrieve inventory from treasury.'
     });
   }
 });

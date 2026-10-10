@@ -93,19 +93,41 @@ export default function App() {
     }
   }, [user]);
 
-  // Fetch Inventory from Supabase
+  // Fetch Inventory from Server / Supabase
   const fetchInventory = useCallback(async () => {
     if (!user || !supabase) return;
     setInventoryLoading(true);
     setInventoryError(null);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) throw new Error('Authentication session expired.');
+
+      // 1. Fetch from server endpoint
+      const res = await fetch('/api/inventory', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        setInventoryItems(json.items || []);
+        return;
+      }
+
+      // 2. Fallback to direct client query under RLS if server endpoint is unavailable
       const { data, error } = await supabase
         .from('loot_items')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || error.message || 'Failed to fetch inventory from treasury.');
+      }
+
       setInventoryItems(data || []);
     } catch (err) {
       setInventoryError(err.message || 'Failed to fetch inventory from treasury.');

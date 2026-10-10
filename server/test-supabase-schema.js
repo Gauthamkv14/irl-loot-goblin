@@ -153,6 +153,17 @@ assert(sqlFixPerms.includes('GRANT SELECT ON public.trade_history TO authenticat
 assert(sqlFixPerms.includes('GRANT INSERT, UPDATE, DELETE ON public.trade_offers TO service_role;'), 'trade_offers service_role mutation grant missing');
 console.log('✓ Trade permissions fix migration verified (SELECT granted under RLS, mutations locked to service_role).');
 
+// 1g. Verify Loot Items Permissions Fix Migration (20261011050000_fix_loot_items_permissions.sql)
+console.log('1g. Verifying Loot Items Permissions Fix migration...');
+const migrationPathFixLootPermissions = path.resolve(__dirname, '../supabase/migrations/20261011050000_fix_loot_items_permissions.sql');
+assert(fs.existsSync(migrationPathFixLootPermissions), 'Loot items permissions fix migration file not found');
+const sqlFixLootPerms = fs.readFileSync(migrationPathFixLootPermissions, 'utf8');
+
+assert(sqlFixLootPerms.includes('GRANT SELECT ON public.loot_items TO authenticated, service_role;'), 'loot_items SELECT grant missing');
+assert(sqlFixLootPerms.includes('REVOKE INSERT, UPDATE, DELETE ON public.loot_items FROM anon, authenticated;'), 'loot_items direct write revocation missing');
+assert(sqlFixLootPerms.includes('GRANT INSERT, UPDATE, DELETE ON public.loot_items TO service_role;'), 'loot_items service_role mutation grant missing');
+console.log('✓ Loot items permissions fix migration verified (SELECT granted under RLS, mutations locked to service_role).');
+
 // 2. Verify Client Graceful Fallback When Unconfigured
 console.log('2. Verifying client configuration fallback when env vars are unconfigured...');
 // Simulate unconfigured state

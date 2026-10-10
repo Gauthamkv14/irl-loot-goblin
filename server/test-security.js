@@ -167,6 +167,20 @@ try {
   // (We simulate payload validation before DB call)
   console.log('✓ Payload schema and signature validation verified.');
 
+  // Subtest 2d: GET /api/inventory missing Authorization header (Expect HTTP 401)
+  const noAuthGetRes = await fetch(`${baseUrl}/api/inventory`);
+  assert.strictEqual(noAuthGetRes.status, 401, 'Expected 401 for missing authorization on GET /api/inventory');
+  const noAuthGetJson = await noAuthGetRes.json();
+  assert(noAuthGetJson.error.includes('Unauthorized'), 'Expected unauthorized error message');
+  console.log('✓ GET /api/inventory rejected request without Bearer token with HTTP 401.');
+
+  // Subtest 2e: GET /api/inventory invalid / forged token (Expect HTTP 401)
+  const fakeTokenGetRes = await fetch(`${baseUrl}/api/inventory`, {
+    headers: { 'Authorization': 'Bearer invalid.token.value' }
+  });
+  assert.strictEqual(fakeTokenGetRes.status, 401, 'Expected 401 for forged token on GET /api/inventory');
+  console.log('✓ GET /api/inventory rejected forged Bearer token with HTTP 401.');
+
 } finally {
   server.close();
 }
