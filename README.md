@@ -321,7 +321,8 @@ supabase/migrations/
 ├── 20261011030000_phase7_leaderboards_and_trading.sql
 ├── 20261011040000_fix_trade_offers_permissions.sql
 ├── 20261011050000_fix_loot_items_permissions.sql
-└── 20261011060000_fix_leaderboard_security_invoker.sql
+├── 20261011060000_fix_leaderboard_security_invoker.sql
+└── 20261011070000_grant_underlying_leaderboard_permissions.sql
 ```
 
 #### Migration Details:
@@ -333,9 +334,10 @@ supabase/migrations/
 6. `20261011040000_fix_trade_offers_permissions.sql`: Grants necessary read permissions on open trade offers and ensures the service role can manage market state.
 7. `20261011050000_fix_loot_items_permissions.sql`: Grants SELECT permissions on `loot_items` to `authenticated` under RLS and ensures direct client mutation privileges remain revoked.
 8. `20261011060000_fix_leaderboard_security_invoker.sql`: Sets `security_invoker = true` on `public.public_leaderboard_view`, resolving the Supabase Security Advisor warning while honoring underlying RLS.
+9. `20261011070000_grant_underlying_leaderboard_permissions.sql`: Grants table SELECT permissions on profiles, progression, and achievements to `service_role` and `authenticated` under RLS so the security-invoker view executes without permission errors.
 
 > [!TIP]
-> If you are upgrading an existing database that already ran `20261010000000_initial_schema.sql`, skip that first file and run files 2 through 8 in order to prevent duplicate policy errors.
+> If you are upgrading an existing database that already ran `20261010000000_initial_schema.sql`, skip that first file and run files 2 through 9 in order to prevent duplicate policy errors.
 
 ### 4. Configure Authentication URLs
 In **Authentication -> URL Configuration**:

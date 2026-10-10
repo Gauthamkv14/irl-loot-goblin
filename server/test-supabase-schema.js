@@ -176,6 +176,21 @@ assert(sqlFixLeaderboardInvoker.includes('WHERE p.is_public = true'), 'is_public
 assert(sqlFixLeaderboardInvoker.includes('GRANT SELECT ON public.public_leaderboard_view TO anon, authenticated, service_role;'), 'SELECT grant missing in invoker migration');
 console.log('✓ Leaderboard security invoker fix migration verified (security_invoker = true enabled, RLS honored).');
 
+// 1i. Verify Underlying Leaderboard Table Permissions Fix Migration (20261011070000_grant_underlying_leaderboard_permissions.sql)
+console.log('1i. Verifying Underlying Leaderboard Table Permissions Fix migration...');
+const migrationPathFixUnderlyingPerms = path.resolve(__dirname, '../supabase/migrations/20261011070000_grant_underlying_leaderboard_permissions.sql');
+assert(fs.existsSync(migrationPathFixUnderlyingPerms), 'Underlying permissions fix migration file not found');
+const sqlFixUnderlyingPerms = fs.readFileSync(migrationPathFixUnderlyingPerms, 'utf8');
+
+assert(sqlFixUnderlyingPerms.includes('GRANT SELECT ON public.profiles TO authenticated, service_role;'), 'profiles SELECT grant missing');
+assert(sqlFixUnderlyingPerms.includes('GRANT SELECT ON public.user_progression TO authenticated, service_role;'), 'user_progression SELECT grant missing');
+assert(sqlFixUnderlyingPerms.includes('GRANT SELECT ON public.user_achievements TO authenticated, service_role;'), 'user_achievements SELECT grant missing');
+assert(sqlFixUnderlyingPerms.includes('GRANT SELECT ON public.daily_quest_progress TO authenticated, service_role;'), 'daily_quest_progress SELECT grant missing');
+assert(sqlFixUnderlyingPerms.includes('GRANT SELECT ON public.hunt_progress TO authenticated, service_role;'), 'hunt_progress SELECT grant missing');
+assert(sqlFixUnderlyingPerms.includes('GRANT INSERT, UPDATE, DELETE ON public.profiles TO service_role;'), 'profiles service_role mutation grant missing');
+assert(sqlFixUnderlyingPerms.includes('GRANT INSERT, UPDATE, DELETE ON public.user_progression TO service_role;'), 'user_progression service_role mutation grant missing');
+console.log('✓ Underlying leaderboard table permissions fix migration verified (SELECT granted to service_role, RLS honored).');
+
 // 2. Verify Client Graceful Fallback When Unconfigured
 console.log('2. Verifying client configuration fallback when env vars are unconfigured...');
 // Simulate unconfigured state

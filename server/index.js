@@ -584,8 +584,11 @@ app.post('/api/profile/privacy', async (req, res) => {
 app.get('/api/leaderboards', async (req, res) => {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const supabaseKey = serviceRoleKey || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!supabaseUrl || !supabaseKey) return res.status(503).json({ error: 'Database service unconfigured.' });
+  if (!supabaseUrl || !serviceRoleKey) {
+    return res.status(503).json({
+      error: 'Database service configuration incomplete on server (SUPABASE_SERVICE_ROLE_KEY required).'
+    });
+  }
 
   const category = req.query.category || 'xp'; // 'xp' | 'hoard' | 'achievements'
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
@@ -593,7 +596,12 @@ app.get('/api/leaderboards', async (req, res) => {
   const offset = (page - 1) * pageSize;
 
   try {
-    const client = createClient(supabaseUrl, supabaseKey);
+    const client = createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
+      }
+    });
     let query = client.from('public_leaderboard_view').select('*', { count: 'exact' });
 
     if (category === 'hoard') {
