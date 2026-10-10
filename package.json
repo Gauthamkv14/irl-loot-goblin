@@ -1,0 +1,23 @@
+{
+  "name": "irl-loot-goblin",
+  "version": "1.0.0",
+  "description": "IRL Loot Goblin — A real-world photo scavenger RPG powered by open-weight vision AI",
+  "scripts": {
+    "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install",
+    "start": "node server/index.js",
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client:dev": "npm --prefix client run dev",
+    "test:server": "npm --prefix server test",
+    "test:provider": "npm --prefix server run test:provider"
+  },
+  "keywords": [
+    "touch-grass",
+    "vision-ai",
+    "rpg",
+    "open-weight",
+    "gemma"
+  ],
+  "author": "",
+  "license": "MIT"
+}

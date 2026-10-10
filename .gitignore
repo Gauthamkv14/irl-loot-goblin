@@ -1,0 +1,21 @@
+node_modules/
+dist/
+client/dist/
+
+# Test uploads / temp files
+test-images/
+server/test-images/
+
+# Environment and secrets
+.env
+.env.*
+*.env
+server/.env
+server/.env.*
+!.env.example
+!server/.env.example
+
+# OS and logs
+.DS_Store
+Thumbs.db
+*.log

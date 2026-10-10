@@ -1,0 +1,23 @@
+{
+  "name": "loot-goblin-server",
+  "version": "1.0.0",
+  "description": "Backend API for IRL Loot Goblin",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test-unit.js && node test-api.js",
+    "test:unit": "node test-unit.js",
+    "test:api": "node test-api.js",
+    "test:provider": "node test-call.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.7",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "multer": "^2.4.0",
+    "zod": "^4.6.5"
+  }
+}
