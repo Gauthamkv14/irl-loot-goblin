@@ -1,7 +1,7 @@
 {
   "name": "irl-loot-goblin",
   "version": "1.0.0",
-  "description": "IRL Loot Goblin — A real-world photo scavenger RPG powered by open-weight vision AI",
+  "description": "IRL Loot Goblin - A real-world photo scavenger RPG powered by open-weight vision AI",
   "scripts": {
     "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install",
     "start": "node server/index.js",

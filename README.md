@@ -6,41 +6,47 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Phase_5_Complete-f59e0b?style=for-the-badge" alt="Status" />
-  <img src="https://img.shields.io/badge/React-Vite-61dafb?style=for-the-badge&logo=react&logoColor=111827" alt="React + Vite" />
-  <img src="https://img.shields.io/badge/Tailwind-CSS-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js and Express" />
+  <img src="https://img.shields.io/badge/Status-Active_Development-10b981?style=for-the-badge" alt="Status: Active Development" />
+  <img src="https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=111827" alt="React 19" />
+  <img src="https://img.shields.io/badge/Vite-8-646cff?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 8" />
+  <img src="https://img.shields.io/badge/Tailwind-CSS_4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
+  <img src="https://img.shields.io/badge/Node.js-20_LTS-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js 20 LTS" />
+  <img src="https://img.shields.io/badge/Express-5-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express 5" />
   <img src="https://img.shields.io/badge/Database-Supabase-3ecf8e?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
   <img src="https://img.shields.io/badge/AI-OpenRouter-7c3aed?style=for-the-badge" alt="OpenRouter" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License" />
 </p>
 
 <p align="center">
-  <a href="#-the-idea">The Idea</a> ·
+  <a href="#-what-is-lootgoblin">What is LootGoblin?</a> ·
   <a href="#-how-it-works">How It Works</a> ·
   <a href="#-key-features">Key Features</a> ·
-  <a href="#-architecture--tech-stack">Architecture & Tech Stack</a> ·
-  <a href="#-phase-5-authentication--persistent-inventory">Phase 5 Details</a> ·
-  <a href="#-prerequisites--quick-start">Quick Start</a> ·
+  <a href="#-the-rarity-economy-system">Rarity & Economy</a> ·
+  <a href="#-architecture-tech-stack">Architecture</a> ·
+  <a href="#-prerequisites">Prerequisites</a> ·
+  <a href="#-quick-start">Quick Start</a> ·
   <a href="#-environment-variables">Environment Variables</a> ·
   <a href="#-database-setup-supabase">Database Setup</a> ·
-  <a href="#-tests--validation">Tests</a> ·
-  <a href="#-render-deployment">Deployment</a> ·
+  <a href="#-running-tests">Running Tests</a> ·
+  <a href="#-deployment">Deployment</a> ·
   <a href="#-troubleshooting">Troubleshooting</a> ·
+  <a href="#-privacy-security-limitations">Privacy & Security</a> ·
+  <a href="#-contributing">Contributing</a> ·
+  <a href="#-roadmap">Roadmap</a> ·
   <a href="#-license">License</a>
 </p>
 
 ---
 
-## 🎒 The Idea
+## 🎒 What is LootGoblin?
 
-What if that random leaf on your morning walk was actually a **Legendary Nature Relic**?
+What if that fallen oak leaf on your morning walk was actually a **Legendary Nature Relic**?
 
-**LootGoblin** is a real-world collectible RPG that turns everyday objects into fictional game loot. Snap a picture of something you discover outdoors, let AI analyze its visual features and spin imaginative RPG lore, and watch as the backend rolls rarity, attributes, and Goblin Coins.
+**LootGoblin** is an outdoor collectible web RPG that transforms everyday physical objects into fantasy game loot. Snap a photo of a pinecone, a curious river pebble, a rusted washer, or an oddly shaped twig. An AI vision model analyzes its physical features and weaves creative fantasy lore, while a server-authoritative game engine rolls rarity, assigns RPG combat stats, and calculates Goblin Coin rewards.
 
-A dried leaf becomes an enchanted arcane talisman. A quartz pebble becomes a dragon-forged rune. A crooked branch becomes an apprentice druid staff.
+Save items to your persistent Treasury, complete daily outdoor quests, level up your goblin adventurer, unlock achievements, climb the public leaderboards, or swap treasures with other players in the Trading Outpost.
 
-The world is your loot table.
+The entire world is your loot table.
 
 > **The Goblin Code:** Real-world exploration, fictional rewards. Take only photos, leave everything where you found it.
 
@@ -49,350 +55,424 @@ The world is your loot table.
 ## 🗺️ How It Works
 
 ```text
-       REAL WORLD
-           │
-           ▼
-    📸 1. Client Photo Capture (Mobile camera or file upload)
-           │ (Canvas client-side resize: 1024px max edge, JPEG ~0.8, < 4 MB)
-           ▼
-    🛡️ 2. Express Backend Validation (MIME & image magic bytes verification)
-           │
-           ├──▶ AI Vision Appraisal (OpenRouter OpenAI-compatible API)
-           │    Creative narrative: Name, Type, Lore, Ability, Visual Observation
-           │
-           └──▶ Server-Authoritative Game Mechanics
-                • Deterministic Rarity Roll (Common -> Legendary)
-                • Bounded Stat Budgets (ATK, DEF, SPD, INT, LUCK)
-                • Goblin Coin Value Range (Rarity-weighted)
-                • Cryptographic HMAC SHA-256 Signature (Full canonical payload)
-           │
-           ▼
-    ✨ 3. Loot Card Presentation (Stats, narrative, coin reward, rarity border)
-           │
-           ▼
-    🏰 4. Server-Authoritative Hoarding (Optional Phase 5 persistent save)
-           • Supabase Auth JWT verification (`getUser(token)`)
-           • Cryptographic tamper detection against server signature
-           • PostgreSQL insert via user-scoped RLS client into `loot_items`
+       PHYSICAL WORLD
+             │
+             ▼
+     📸 1. Capture & Optimize (Browser Camera or File Upload)
+             │ Canvas resizes image to <= 1024px max dimension, strips EXIF data
+             ▼
+     🛡️ 2. Server Validation & Deep Inspection (Node.js & Express)
+             │ Inspects file magic bytes (JPEG, PNG, WebP) to prevent spoofing
+             │
+             ├──▶ AI Vision Appraisal (OpenRouter API)
+             │    Generates name, item type, narrative lore, visual notes, ability
+             │
+             └──▶ Server-Authoritative Game Engine
+                  • Rolls deterministic rarity (Common to Legendary)
+                  • Allocates bounded stat budgets (ATK, DEF, SPD, INT, LUCK)
+                  • Awards rarity-weighted Goblin Coins
+                  • Signs full payload with HMAC-SHA256 token
+             │
+             ▼
+     ✨ 3. Loot Card Presentation
+             │ Displays animated rarity borders, stats, lore, and coin rewards
+             ▼
+     🏰 4. Persistent Treasury, Progression & Trading
+             • Saves securely using Supabase JWT authentication
+             • Verifies cryptographic HMAC signature to prevent stat tampering
+             • Runs atomic updates in private PostgreSQL schema (goblin_internal)
+             • Updates daily quests, tracks scavenger hunts, and manages peer trades
 ```
 
 ---
 
 ## ✨ Key Features
 
-- **Mobile-First Dark Fantasy UI**: Atmospheric parchment, moss green, stone-gray tones, and rich rarity accents.
-- **Client-Side Image Optimization**: Browser Canvas resizes high-res phone camera uploads to $\le$ 1024px max dimension before transmission, minimizing data usage and upload latency.
-- **Deep Magic Byte Verification**: Server inspects buffer headers (`FF D8 FF` for JPEG, `89 50 4E 47` for PNG, `RIFF...WEBP` for WebP) to reject spoofed files before touching the AI provider.
-- **Creative AI Appraisals**: Uses an open-weight vision model via OpenRouter's OpenAI-compatible API to describe visual characteristics and invent playful lore.
-- **Server-Authoritative Rarity & Balance**: The AI never decides stats or rarity. Rarity weights, stat budgets, and coin rewards are rolled and strictly capped by the backend loot engine.
-- **Full-Payload Cryptographic Signing**: Server signs all narrative and numerical attributes with an HMAC SHA-256 token. Altering any coin, stat, rarity, or lore field fails signature verification on save.
-- **Supabase Authentication**: Email/password sign-up, sign-in, session persistence, and password reset via Supabase Auth.
-- **Persistent Treasury & User Isolation**: Authenticated hoarders can save appraised items to their personal inventory, browse their collection, and sort by date, coin value, or rarity.
-- **Graceful Unconfigured Fallback**: If Supabase credentials are not supplied, the app runs seamlessly in guest appraisal mode without crashing or blocking users.
-- **Deterministic Offline Fallbacks**: If the AI model times out or encounters network hurdles, the app automatically delivers a thematic fallback loot card (`source: "fallback"`).
+### 🔍 Vision Appraisals & Fantasy Lore
+- **AI-Powered Item Appraisal:** Uses an open-weight vision model via OpenRouter's OpenAI-compatible API (`dots-studio/dots-3-note-preview:free`) to examine visual details and spin humorous, immersive RPG lore.
+- **Client-Side Image Optimization:** Resizes high-resolution smartphone photos in an in-memory HTML5 Canvas to 1024px before transmission, drastically reducing upload latency and bandwidth.
+- **Magic Byte Verification:** Inspects binary headers (`FF D8 FF` for JPEG, `89 50 4E 47` for PNG, `RIFF...WEBP` for WebP) in memory to block invalid or malicious files before calling the AI provider.
+
+### ⚖️ Server-Authoritative Balance & Cryptographic Security
+- **Strictly Bounded Stats:** The AI never sets numerical values. Rarity rolls, stat distributions (ATK, DEF, SPD, INT, LUCK), and coin values are computed server-side under strict mathematical caps.
+- **Full-Payload HMAC-SHA256 Signing:** Every appraisal is signed with a secret server key. If a user modifies their stats, coin reward, or rarity before saving, the server rejects the write.
+- **Private PostgreSQL Schema:** Critical database write functions run inside a private schema (`goblin_internal`) accessible only to the server's service role, blocking direct client manipulation.
+
+### 💰 Treasury & Progression
+- **Persistent Personal Treasury:** Authenticated players save appraised relics to their personal inventory, filter by rarity, sort by date or value, and view hoarded item cards.
+- **Deterministic XP & Level Curve:** Earn XP from appraising relics, completing quests, and unlocking achievements. Level scaling follows a smooth exponential curve:
+  $$\text{XP Required for Level } L = 100 \times (L - 1)^{1.5}$$
+- **Rotating Daily Quests:** Three deterministic quests generated daily based on UTC calendar dates (e.g. appraising specific rarities, finding nature relics).
+- **Themed Scavenger Hunts:** Multi-stage outdoor hunting goals (e.g. Forest Curios, Ancient Minerals) with bonus XP and coin rewards.
+- **Badges & Achievements:** 10 collectible milestones tracking inventory size, rare discoveries, and completed quests.
+
+### 🤝 Trading Outpost & Leaderboards
+- **Peer-to-Peer Trading:** Post open trade offers with custom wanted descriptions, browse active market stalls, and exchange items safely.
+- **Deadlock-Free Atomic Swaps:** Stored procedures acquire PostgreSQL row-level locks in deterministic alphabetical order, preventing race conditions and double-trading.
+- **Opt-in Public Profiles:** Privacy by default. User profiles remain hidden from leaderboards until the player explicitly opts in and chooses a public goblin display name.
+- **Hall of Fame Leaderboards:** Browse top players ranked by level, total relics hoarded, and unlocked achievements through a secure database view that never exposes email addresses or private inventory records.
+
+### 📱 User Experience & Resilience
+- **Dark Fantasy Aesthetic:** Atmospheric palette with moss green, stone-gray, weathered parchment, and custom rarity glow effects.
+- **Offline & Model Fallback:** If the AI provider times out or experiences an outage, the app falls back to themed offline loot cards (`source: "fallback"`), ensuring uninterrupted gameplay.
+- **Zero-Config Guest Mode:** You can test appraisals and explore the interface immediately without configuring a database.
 
 ---
 
 ## 🎲 The Rarity & Economy System
 
-Every appraisal triggers a weighted server-side roll:
+Every appraisal triggers a weighted random roll on the server:
 
-| Rarity | Weight | Stat Budget | Coin Value Range | Appearance Accent |
+| Rarity | Drop Rate | Total Stat Budget | Coin Reward Range | Theme Accent |
 | :--- | :---: | :---: | :---: | :--- |
-| **Common** | 45% | 4 – 7 pts | 5 – 15 🪙 | Muted Slate Gray |
-| **Uncommon** | 28% | 8 – 12 pts | 16 – 40 🪙 | Forest Green |
-| **Rare** | 16% | 13 – 18 pts | 41 – 100 🪙 | Arcane Blue |
-| **Epic** | 8% | 19 – 25 pts | 101 – 250 🪙 | Regal Purple |
-| **Legendary** | 3% | 26 – 35 pts | 251 – 500 🪙 | Radiant Gold Amber |
+| **Common** | 45% | 4 - 7 pts | 5 - 15 🪙 | Muted Slate Gray |
+| **Uncommon** | 28% | 8 - 12 pts | 16 - 40 🪙 | Forest Green |
+| **Rare** | 16% | 13 - 18 pts | 41 - 100 🪙 | Arcane Sapphire |
+| **Epic** | 8% | 19 - 25 pts | 101 - 250 🪙 | Mystic Purple |
+| **Legendary** | 3% | 26 - 35 pts | 251 - 500 🪙 | Radiant Amber Gold |
 
-Stat attributes distribute points dynamically across `ATK`, `DEF`, `SPD`, `INT`, and `LUCK` up to the selected rarity budget.
+Stat points are dynamically distributed across five core attributes:
+- **ATK (Attack):** Offensive potential and cutting edge.
+- **DEF (Defense):** Durability, hardness, and resilience.
+- **SPD (Speed):** Aerodynamics, weight, and swiftness.
+- **INT (Intelligence):** Arcane resonance and ancient wisdom.
+- **LUCK (Luck):** Odd fortune and bizarre quirks.
 
 ---
 
 ## 🛠️ Architecture & Tech Stack
 
-```text
-┌────────────────────────────────────────────────────────┐
-│                   Frontend (React + Vite)              │
-│  - Tailwind CSS dark fantasy theme                     │
-│  - Canvas image resizer (lib/resizeImage.js)          │
-│  - Supabase client listener & AuthModal                │
-│  - Inventory treasury view & rarity filter             │
-└──────────────────────────┬─────────────────────────────┘
-                           │ HTTP /api/appraise & /api/inventory/save
-                           ▼
-┌────────────────────────────────────────────────────────┐
-│                   Backend (Express 5 on Node.js)       │
-│  - In-memory Multer file validation + Magic Bytes      │
-│  - OpenRouter Vision API (dots-studio/dots-3-note-preview)│
-│  - Loot engine & budget generator (engine.js)         │
-│  - Full payload HMAC-SHA256 signer (auth.js)           │
-│  - Token-verified save endpoint (/api/inventory/save)  │
-└──────────────┬───────────────────────────┬─────────────┘
-               │                           │
-               ▼                           ▼
-┌──────────────────────────────┐ ┌───────────────────────┐
-│ OpenRouter Vision Model     │ │ Supabase (Auth & PG)  │
-│ - Vision analysis            │ │ - JWT Auth (`getUser`)│
-│ - Fictional item naming & lore│ │ - RLS User Isolation │
-└──────────────────────────────┘ └───────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Client ["Client (React 19 + Vite 8 + Tailwind CSS 4)"]
+        UI["Dark Fantasy UI (Appraise, Treasury, Quests, Badges, Ranks, Market)"]
+        Canvas["HTML5 Canvas (Image Resizing & EXIF Stripping)"]
+        SupaClient["Supabase Auth Client (JWT Session Management)"]
+    end
+
+    subgraph Server ["Backend (Node.js 20 LTS + Express 5)"]
+        Upload["Multer Memory Buffer + Magic Byte Verifier"]
+        LootEng["Loot Engine (Rarity Roll, Stat Budgets, Coin Rewards)"]
+        Signer["Cryptographic Signer (HMAC-SHA256 Token)"]
+        ProgEng["Progression Engine (XP Math, Quests, Achievements)"]
+        SupaAdmin["Service-Role Supabase Client (Private Schema Caller)"]
+    end
+
+    subgraph External ["External Services"]
+        OpenRouter["OpenRouter Vision API (dots-studio/dots-3-note-preview:free)"]
+        SupabaseDB["Supabase PostgreSQL 15+ (Auth, RLS, goblin_internal Schema)"]
+    end
+
+    Canvas -->|Optimized Image Multipart Form| Upload
+    Upload -->|Base64 Image Payload| OpenRouter
+    OpenRouter -->|Fictional Lore JSON| LootEng
+    LootEng --> Signer
+    Signer -->|Signed Loot Payload| UI
+    UI -->|Bearer JWT + Signed Loot Record| SupaAdmin
+    SupaAdmin -->|Atomic Function Call| SupabaseDB
+    SupaClient -.->|User Auth Tokens| SupabaseDB
 ```
 
-- **Frontend**: React 19, Vite 8, Tailwind CSS 4.
-- **Backend**: Node.js 20+, Express 5, Multer, Zod 4, Express Rate Limit.
-- **Inference**: OpenRouter OpenAI-compatible API (`dots-studio/dots-3-note-preview:free`).
-- **Database & Auth**: Supabase (PostgreSQL 15+ with Row Level Security and GoTrue Auth).
-- **Deployment**: Render Web Service (Single unified Node service serving the Express API and compiled Vite static frontend).
+### Component Breakdown
+- **Frontend:** React 19, Vite 8, Tailwind CSS 4, Lucide Icons.
+- **Backend:** Node.js 20 LTS, Express 5, Multer (in-memory file handling), Zod (runtime validation), Express Rate Limit.
+- **AI Vision:** OpenRouter OpenAI-compatible API using the free vision model `dots-studio/dots-3-note-preview:free`.
+- **Database & Authentication:** Supabase (PostgreSQL 15+, GoTrue Auth, Row Level Security, private schema functions).
+- **Deployment:** Render Web Service (unified production build serving both the Express API and static React frontend).
 
 ---
 
-## 🏰 Phase 5: Authentication & Persistent Inventory
+## 📋 Prerequisites
 
-Phase 5 introduces accounts and persistent hoard management:
-
-### Implemented Features
-1. **User Authentication**:
-   - Clean modal UI for Sign In, Sign Up, and Password Reset.
-   - Session restoration and live state synchronization with `supabase.auth.onAuthStateChange`.
-   - Automatic guest mode fallback when credentials are not configured.
-2. **Server-Authoritative Save Flow**:
-   - `POST /api/inventory/save` requires a valid Supabase `Bearer <token>`.
-   - The server verifies the token against the Supabase Auth API using `getUser(token)`. The client-supplied user ID is never trusted.
-   - The server recalculates and validates the HMAC-SHA256 signature across all canonical narrative and numerical fields (`id`, `createdAt`, `source`, `observed_object`, `confidence`, `name`, `item_type`, `rarity`, `goblin_value`, `stats`, `ability_name`, `ability_description`, `lore`, `appraisal`, `disclaimer`).
-   - If any attribute has been altered, the server rejects the save with HTTP 403.
-3. **Treasury (Inventory) Interface**:
-   - Grid view displaying hoarded relics with card thumbnails.
-   - Summary banner showing total items and accumulated Goblin Coins.
-   - Filtering by rarity (`All`, `Legendary`, `Epic`, `Rare`, `Uncommon`, `Common`) and sorting by newest, value, or rarity.
-   - Detailed single-item view with full RPG lore inspection.
-4. **Database Security & Immutability**:
-   - PostgreSQL schema with foreign key constraints and unique compound index `(user_id, item_id)`.
-   - Row Level Security (RLS) ensures users can only read, insert, and delete items where `auth.uid() = user_id`.
-   - Direct `UPDATE` permissions on `loot_items` are revoked from `anon` and `authenticated` roles. Hoarded stats, rarity, and coins are completely immutable once saved.
+Before setting up LootGoblin locally, ensure you have:
+1. **Node.js 20 LTS** or higher ([nodejs.org](https://nodejs.org))
+2. **npm 10** or higher
+3. An **OpenRouter API Key** ([openrouter.ai](https://openrouter.ai)) with access to free vision models
+4. A free **Supabase Account** ([supabase.com](https://supabase.com)) if you wish to test user accounts, persistent inventory, leaderboards, and trading
 
 > [!NOTE]
-> **Verification Status**: The Phase 5 frontend auth flow, backend API authorization checks, cryptographic tamper detection, and SQL migration syntax have been fully validated via local automated test suites. Applying the migration against your live Supabase project requires running `supabase/migrations/20261010000000_initial_schema.sql` in your Supabase SQL Editor.
+> If you only want to test item appraisals without persistent accounts, you do not need Supabase. The app starts and runs gracefully in guest appraisal mode.
 
 ---
 
-## 🚀 Prerequisites & Quick Start
+## ⚡ Quick Start
 
-### Prerequisites
-- **Node.js**: Version 20.x or higher (Node 22 LTS supported).
-- **npm**: Version 10.x or higher.
-- **OpenRouter API Key**: Obtain a free API key at [openrouter.ai](https://openrouter.ai/).
-- **Supabase Account** *(Optional for local appraisal; required for inventory saving)*: Create a free project at [supabase.com](https://supabase.com/).
-
-### 1. Clone Repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/Gauthamkv14/irl-loot-goblin.git
 cd irl-loot-goblin
 ```
 
 ### 2. Install Dependencies
-Install dependencies across root, client, and server workspaces:
+Install dependencies for both the frontend and backend:
 ```bash
 npm --prefix client install
 npm --prefix server install
 ```
 
-### 3. Configure Local Environment
-Copy the example environment files:
+### 3. Set Up Environment Files
+Copy the template files into active environment configurations:
 
-**PowerShell (Windows)**:
+**On Windows (PowerShell):**
 ```powershell
 Copy-Item server/.env.example server/.env
 Copy-Item client/.env.example client/.env
 ```
 
-**Bash (macOS / Linux)**:
+**On macOS / Linux (Bash):**
 ```bash
 cp server/.env.example server/.env
 cp client/.env.example client/.env
 ```
 
-Edit `server/.env` and `client/.env` with your credentials (see [Environment Variables](#-environment-variables)).
+Edit `server/.env` to include your OpenRouter API key. See [Environment Variables](#-environment-variables) for full details.
 
-### 4. Running the Application
+### 4. Run the Application
 
-#### Option A: Unified Production Build (Recommended)
-Build the frontend and run the production Express server serving both the API and client assets:
+You can run LootGoblin in either development mode or unified production mode:
+
+#### Option A: Local Development Mode (Recommended for Development)
+Start the backend API in your first terminal window:
+```bash
+npm run server:dev
+```
+*(Runs Express with automatic reload on `http://localhost:3000`)*
+
+Start the frontend Vite server in a second terminal window:
+```bash
+npm run client:dev
+```
+*(Runs Vite with hot module replacement on `http://localhost:5173`, automatically proxying `/api` calls to port 3000)*
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+#### Option B: Unified Production Mode (Recommended for Verification)
+Build the frontend assets and run the unified Express production server:
 ```bash
 npm run build
 npm start
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-#### Option B: Local Development Mode (Hot Reload)
-Start the backend API server in terminal 1:
-```bash
-npm run server:dev
-```
-*(Starts Express server with file watch on port 3000)*
-
-Start the Vite development server in terminal 2:
-```bash
-npm run client:dev
-```
-*(Starts Vite dev server on port 5173 with automatic `/api` proxying to `http://localhost:3000`)*
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
 ---
 
 ## 🔑 Environment Variables
 
-The project separates client-exposed variables from private server secrets.
+The project strictly separates server-side secrets from public client variables.
 
-### Backend (`server/.env`)
-| Variable | Required | Description |
-| :--- | :---: | :--- |
-| `PROVIDER_BASE_URL` | Yes | OpenRouter endpoint base URL. Default: `https://openrouter.ai/api/v1` |
-| `PROVIDER_API_KEY` | Yes | Your private OpenRouter API key (`sk-or-v1-...`). |
-| `MODEL_ID` | Yes | Vision model ID. Default: `dots-studio/dots-3-note-preview:free` |
-| `PORT` | No | Server port (defaults to `3000` locally, injected dynamically by Render). |
-| `LOOT_SIGNING_SECRET` | **Prod Only** | 64-character hex secret used for HMAC-SHA256 loot integrity signing. Must be at least 32 characters. Stable across deployments. |
-| `SUPABASE_URL` | For Auth | Your Supabase project URL (e.g., `https://xyzproject.supabase.co`). |
-| `SUPABASE_ANON_KEY` | For Auth | Your Supabase anon public key for server-side token validation. |
+### Backend Secrets (`server/.env`)
+These variables must **never** be shared or committed to source control:
 
-**Generating a secure `LOOT_SIGNING_SECRET`:**
+| Variable | Required | Default / Example | Purpose |
+| :--- | :---: | :--- | :--- |
+| `PROVIDER_BASE_URL` | Yes | `https://openrouter.ai/api/v1` | OpenRouter OpenAI-compatible endpoint |
+| `PROVIDER_API_KEY` | Yes | `sk-or-v1-...` | Your private OpenRouter API key |
+| `MODEL_ID` | Yes | `dots-studio/dots-3-note-preview:free` | AI vision model identifier |
+| `PORT` | No | `3000` | Port for the Express server |
+| `LOOT_SIGNING_SECRET` | **Prod Only** | 64-character hex string | HMAC secret for tamper-proofing appraisals |
+| `SUPABASE_URL` | For Auth | `https://xyzproject.supabase.co` | Supabase project REST URL |
+| `SUPABASE_ANON_KEY` | For Auth | `eyJhbGci...` | Supabase public key for server token verification |
+| `SUPABASE_SERVICE_ROLE_KEY` | For Auth | `eyJhbGci...` | Supabase service-role key for internal stored procedures |
+
+#### Generating a Strong Loot Signing Secret
+To generate a secure 64-character hex string for `LOOT_SIGNING_SECRET`:
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### Frontend (`client/.env`)
-| Variable | Required | Description |
-| :--- | :---: | :--- |
-| `VITE_SUPABASE_URL` | For Auth | Your Supabase project URL (e.g., `https://xyzproject.supabase.co`). |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | For Auth | Your Supabase project anonymous/publishable key. |
+### Frontend Configuration (`client/.env`)
+These variables are bundled into static JavaScript by Vite and are visible in browser requests:
+
+| Variable | Required | Default / Example | Purpose |
+| :--- | :---: | :--- | :--- |
+| `VITE_SUPABASE_URL` | For Auth | `https://xyzproject.supabase.co` | Supabase project URL for client authentication |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | For Auth | `eyJhbGci...` | Supabase anonymous/publishable key for browser client |
 
 > [!CAUTION]
-> Never put `PROVIDER_API_KEY`, `LOOT_SIGNING_SECRET`, or Supabase service-role keys into `client/.env` or prefix them with `VITE_`. Client variables are baked into static JavaScript bundles and visible to all users.
+> Never place `PROVIDER_API_KEY`, `LOOT_SIGNING_SECRET`, or `SUPABASE_SERVICE_ROLE_KEY` into `client/.env` or prefix them with `VITE_`. Doing so exposes your server credentials to anyone visiting the site.
 
 ---
 
 ## 🗄️ Database Setup (Supabase)
 
-To enable user accounts, persistent inventory saving, quests, progression, leaderboards, and trading:
+To enable user accounts, inventory persistence, daily quests, leaderboards, and item trading, connect a Supabase project:
 
-1. Log in to [supabase.com](https://supabase.com) and create a new project.
-2. In the Supabase Dashboard, navigate to **Project Settings $\rightarrow$ API**:
-   - Copy **Project URL** into `SUPABASE_URL` and `VITE_SUPABASE_URL`.
-   - Copy **Project API keys $\rightarrow$ anon / public** into `SUPABASE_ANON_KEY` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
-   - Copy **Project API keys $\rightarrow$ service_role** into `SUPABASE_SERVICE_ROLE_KEY` in `server/.env` (server-side only!).
-3. In **Project Settings $\rightarrow$ API $\rightarrow$ Extra search path / Exposed schemas**, add `goblin_internal`.
-4. Navigate to **SQL Editor $\rightarrow$ New query** and execute the migrations in sequential order:
-   - `supabase/migrations/20261010000000_initial_schema.sql` (Phase 5 base schema & profiles trigger)
-   - `supabase/migrations/20261011000000_phase6_progression.sql` (Phase 6 base progression tables)
-   - `supabase/migrations/20261011020000_private_rpc_security_remediation.sql` (Private schema `goblin_internal` & atomic progression RPC)
-   - `supabase/migrations/20261011030000_phase7_leaderboards_and_trading.sql` (Phase 7 public profiles, leaderboard view, trade tables, and trading RPCs)
+### 1. Create a Supabase Project
+1. Sign in to [supabase.com](https://supabase.com) and create a new project.
+2. Under **Project Settings -> API**, copy:
+   - **Project URL** into `SUPABASE_URL` (`server/.env`) and `VITE_SUPABASE_URL` (`client/.env`).
+   - **anon / public key** into `SUPABASE_ANON_KEY` (`server/.env`) and `VITE_SUPABASE_PUBLISHABLE_KEY` (`client/.env`).
+   - **service_role key** into `SUPABASE_SERVICE_ROLE_KEY` (`server/.env`).
 
-### Authentication URL Configuration
-In **Authentication $\rightarrow$ URL Configuration**:
-- **Site URL**:
-  - Local testing: `http://localhost:5173` (or `http://localhost:3000` for production builds)
+### 2. Configure Exposed Schemas
+In the Supabase Dashboard, navigate to **Project Settings -> API -> Extra search path / Exposed schemas**. Add `goblin_internal` alongside `public` and save changes.
+
+*(Exposing this schema in PostgREST allows the backend's service-role client to call internal stored procedures. Because permissions on `goblin_internal` are revoked from anonymous and authenticated roles, end users cannot call these functions directly).*
+
+### 3. Run Database Migrations
+Open the Supabase **SQL Editor -> New query** and run the migration files in numerical order:
+
+```text
+supabase/migrations/
+├── 20261010000000_initial_schema.sql
+├── 20261011000000_phase6_progression.sql
+├── 20261011010000_progression_security_remediation.sql
+├── 20261011020000_private_rpc_security_remediation.sql
+├── 20261011030000_phase7_leaderboards_and_trading.sql
+└── 20261011040000_fix_trade_offers_permissions.sql
+```
+
+#### Migration Details:
+1. `20261010000000_initial_schema.sql`: Sets up user profiles, the `loot_items` table, initial Row Level Security (RLS) policies, and automatic profile creation triggers.
+2. `20261011000000_phase6_progression.sql`: Adds tables for player progression, daily quests, scavenger hunts, and achievements.
+3. `20261011010000_progression_security_remediation.sql`: Revokes direct client `INSERT`, `UPDATE`, and `DELETE` permissions on progression tables to prevent stat tampering.
+4. `20261011020000_private_rpc_security_remediation.sql`: Creates the isolated `goblin_internal` schema and the atomic `hoard_relic_atomic` stored procedure.
+5. `20261011030000_phase7_leaderboards_and_trading.sql`: Adds public profile fields, the privacy-preserving leaderboard view, trading tables, and atomic swap procedures.
+6. `20261011040000_fix_trade_offers_permissions.sql`: Grants necessary read permissions on open trade offers and ensures the service role can manage market state.
+
+> [!TIP]
+> If you are upgrading an existing database that already ran `20261010000000_initial_schema.sql`, skip that first file and run files 2 through 6 in order to prevent duplicate policy errors.
+
+### 4. Configure Authentication URLs
+In **Authentication -> URL Configuration**:
+- **Site URL:**
+  - Local dev: `http://localhost:5173` (or `http://localhost:3000` for production builds)
   - Production: `https://loot-goblin.onrender.com`
-- **Redirect URLs**: Add both local and production URLs:
+- **Redirect URLs:** Add both local and production callback patterns:
   - `http://localhost:5173/**`
   - `http://localhost:3000/**`
   - `https://loot-goblin.onrender.com/**`
 
 ---
 
-## 🧪 Tests & Validation
+## 🧪 Running Tests
 
-The test suite covers algorithmic unit rules, live vision appraisals, HTTP contracts, security tamper protection, progression math, trading locks, and static serving:
+LootGoblin includes comprehensive test suites verifying mathematical balance, API contracts, cryptographic security, and database migrations:
 
 ```bash
 # Run backend unit and live API integration tests
 npm run test:server
 
-# Run unit tests only (loot engine budget rules, Zod schemas, safety filters)
+# Run unit tests only (rarity budgets, stat caps, Zod schemas, safety filters)
 npm --prefix server run test:unit
 
-# Run live API integration tests (image magic byte verification, OpenRouter vision)
+# Run live API integration tests (image magic byte verification, vision model appraisal)
 npm --prefix server run test:api
 
-# Run Phase 5 cryptographic signing and authorization tests
+# Run cryptographic integrity and tamper defense tests
 node server/test-security.js
 
-# Run Phase 6 progression, daily quest determinism, and achievement tests
+# Run progression curve math, daily quest rotation, and achievement tests
 node server/test-progression.js
 
-# Run Phase 7 trading, row lock ordering, and leaderboard security tests
+# Run peer-to-peer trading lock ordering, atomic swaps, and leaderboard privacy tests
 node server/test-trading-and-leaderboards.js
 
-# Run Supabase SQL migration schema & contract checks (Phases 5, 6, and 7)
+# Run Supabase SQL migration contract and permission checks
 node server/test-supabase-schema.js
 
-# Run frontend/backend contract tests
+# Run frontend/backend API shape contract tests
 node server/test-contract.js
 
-# Verify unified production static hosting & SPA routing
+# Verify single-service production static serving and SPA routing
 node server/test-production-serve.js
 
-# Full production compile test
+# Run full client and server production build check
 npm run build
 ```
 
 ---
 
-## 🌐 Render Deployment
+## 🌐 Deployment
 
-LootGoblin deploys as a single Node.js Web Service on [Render](https://render.com), serving both the Express backend API and the static React production assets.
+LootGoblin is designed to run as a single unified Node.js Web Service on platforms like [Render](https://render.com). The Express server serves both the JSON API and the compiled React single-page application.
 
-### Render Dashboard Settings
-- **Service Type**: Web Service
-- **Environment**: Node
-- **Build Command**: `npm run build`
-- **Start Command**: `npm start`
-- **Health Check Path**: `/api/health`
+### Render Web Service Configuration
+- **Service Type:** Web Service
+- **Runtime:** Node
+- **Build Command:** `npm run build`
+- **Start Command:** `npm start`
+- **Health Check Path:** `/api/health`
 
-### Render Environment Variables
-Add these in **Dashboard $\rightarrow$ Environment**:
-1. `NODE_VERSION` = `20`
-2. `PROVIDER_BASE_URL` = `https://openrouter.ai/api/v1`
-3. `PROVIDER_API_KEY` = *your_openrouter_api_key*
-4. `MODEL_ID` = `dots-studio/dots-3-note-preview:free`
-5. `LOOT_SIGNING_SECRET` = *your_generated_32_byte_hex_secret*
-6. `SUPABASE_URL` = *https://your-project.supabase.co*
-7. `SUPABASE_ANON_KEY` = *your_supabase_anon_key*
-8. `VITE_SUPABASE_URL` = *https://your-project.supabase.co*
-9. `VITE_SUPABASE_PUBLISHABLE_KEY` = *your_supabase_anon_key*
+### Environment Variables on Render
+Set the following variables in the Render dashboard:
+```text
+NODE_VERSION=20
+PROVIDER_BASE_URL=https://openrouter.ai/api/v1
+PROVIDER_API_KEY=<your_openrouter_api_key>
+MODEL_ID=dots-studio/dots-3-note-preview:free
+LOOT_SIGNING_SECRET=<your_64_character_hex_secret>
+SUPABASE_URL=https://<your_project>.supabase.co
+SUPABASE_ANON_KEY=<your_supabase_anon_key>
+SUPABASE_SERVICE_ROLE_KEY=<your_supabase_service_role_key>
+VITE_SUPABASE_URL=https://<your_project>.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=<your_supabase_anon_key>
+```
 
 > [!IMPORTANT]
-> Keep `LOOT_SIGNING_SECRET` stable in Render's environment settings. If the secret is changed or rotated between redeployments, unhoarded cards appraised with the previous secret will fail signature validation.
+> Keep `LOOT_SIGNING_SECRET` persistent across deployments. If the secret changes during a redeployment, cards appraised prior to the update will fail signature validation upon saving.
 
-For detailed deployment architecture, consult [DEPLOYMENT.md](DEPLOYMENT.md).
+For more details on deployment configurations, consult [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ---
 
 ## 🔧 Troubleshooting
 
 ### 1. "Authentication is currently disabled / Supabase Not Configured"
-- **Cause**: `VITE_SUPABASE_URL` or `VITE_SUPABASE_PUBLISHABLE_KEY` is missing or contains placeholder values.
-- **Fix**: Verify `client/.env` contains your active Supabase URL and public anon key, then restart Vite.
+- **Cause:** `VITE_SUPABASE_URL` or `VITE_SUPABASE_PUBLISHABLE_KEY` is missing or contains placeholder values.
+- **Fix:** Add your Supabase project credentials to `client/.env` and restart the Vite development server.
 
 ### 2. "FATAL: LOOT_SIGNING_SECRET must be configured in environment variables for production"
-- **Cause**: `NODE_ENV=production` is set, but `LOOT_SIGNING_SECRET` is missing or fewer than 32 characters.
-- **Fix**: Generate a 64-character hex secret (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) and add it to your server environment.
+- **Cause:** Running in production mode (`NODE_ENV=production`) without a valid `LOOT_SIGNING_SECRET` of at least 32 characters.
+- **Fix:** Generate a 64-character hex secret (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) and add it to your server environment.
 
 ### 3. "Tampering detected! Loot record does not match certified server appraisal"
-- **Cause**: An attempt was made to save an item whose fields (rarity, stats, coins, name, lore) were modified, or the server's signing secret changed between appraisal and save.
-- **Fix**: Ensure `LOOT_SIGNING_SECRET` remains constant across server restarts. Do not modify loot card properties before saving.
+- **Cause:** A loot card attribute was modified before saving, or the server was restarted with a newly randomized signing secret between appraisal and save.
+- **Fix:** Ensure `LOOT_SIGNING_SECRET` remains constant across server restarts. Do not modify loot card properties before saving.
 
-### 4. "Corrupted or spoofed image file"
-- **Cause**: Uploaded file header bytes do not match standard JPEG, PNG, or WebP magic bytes.
-- **Fix**: Ensure you are uploading a valid image file directly from a device or camera.
+### 4. "Failed to fetch trade offers: permission denied for table trade_offers"
+- **Cause:** Migration `20261011040000_fix_trade_offers_permissions.sql` has not been applied to grant read permissions on trade offers.
+- **Fix:** Run `supabase/migrations/20261011040000_fix_trade_offers_permissions.sql` in your Supabase SQL Editor.
+
+### 5. "Corrupted or spoofed image file"
+- **Cause:** Uploaded file headers do not match standard JPEG, PNG, or WebP binary magic bytes.
+- **Fix:** Ensure you are uploading a genuine image directly from a phone camera or valid image file.
 
 ---
 
 ## 🛡️ Privacy, Security & Limitations
 
-- **No Real World Geolocation Stored**: Photos are processed purely for visual feature extraction; EXIF GPS coordinates are stripped during client Canvas resizing.
-- **Ephemeral Photo Storage**: Uploaded photo buffers exist only in server memory for the duration of the appraisal call. Full-size photos are never written to disk or database.
-- **Thumbnail Optimization**: When saving items, the client sends a small, lightweight data URL thumbnail ($\le$ 100 KB) for inventory rendering.
-- **Model Hallucinations**: Item appraisals are fictional game narratives created by an open-weight model. They do not constitute actual appraisals or material identification of real-world objects.
+- **No Geolocation Collected or Stored:** LootGoblin does not access GPS hardware or store coordinates. Photos are stripped of EXIF metadata in the browser's HTML5 Canvas prior to upload.
+- **In-Memory Photo Processing:** Uploaded images exist only in server memory for the duration of the AI appraisal call. Full-resolution photos are never stored on disk or in the database.
+- **Lightweight Thumbnails:** When a relic is saved to a treasury, only a compressed data URL thumbnail (<= 100 KB) is stored to enable inventory rendering.
+- **Model Hallucinations Notice:** Appraisals are whimsical fantasy narratives generated by an artificial intelligence model. They are intended solely for fictional entertainment and do not represent accurate botanical, geological, or monetary evaluations of real-world objects.
+
+---
+
+## 🤝 Contributing
+
+Contributions to LootGoblin are welcome! Whether you are fixing a bug, improving documentation, or proposing new gameplay mechanics, here is how to get started:
+
+1. **Fork the Repository:** Click the "Fork" button at the top of the repository page.
+2. **Clone your Fork:**
+   ```bash
+   git clone https://github.com/<your-username>/irl-loot-goblin.git
+   cd irl-loot-goblin
+   ```
+3. **Create a Feature Branch:**
+   ```bash
+   git checkout -b feature/amazing-idea
+   ```
+4. **Make Changes & Test:** Ensure all existing test suites pass:
+   ```bash
+   npm run test:server
+   node server/test-security.js
+   node server/test-progression.js
+   node server/test-trading-and-leaderboards.js
+   npm run build
+   ```
+5. **Commit with Clear Messages:** Follow conventional commit guidelines where possible.
+6. **Open a Pull Request:** Submit your PR against the `main` branch with a clear description of your changes.
 
 ---
 
@@ -403,18 +483,22 @@ For detailed deployment architecture, consult [DEPLOYMENT.md](DEPLOYMENT.md).
 - [x] Phase 3: Mobile-first dark fantasy UI, Canvas image resizer, and loot cards
 - [x] Phase 4: Single-service production serving and Render deployment preparation
 - [x] Phase 5: Supabase authentication, server-authoritative loot signing, and persistent treasury
-- [ ] Phase 6: Daily exploration quests, scavenger hunts, and goblin achievements
-- [ ] Phase 7: Public hoarder leaderboards and trading outpost
+- [x] Phase 6: Daily exploration quests, scavenger hunts, progression math, and security remediation
+- [x] Phase 7: Public hoarder leaderboards, opt-in privacy, and trading outpost
 
 ---
 
 ## 📄 License
 
-This project is licensed under the terms of the MIT License. See [LICENSE.md](LICENSE.md) for details.
+This project is licensed under the terms of the MIT License. See [LICENSE.md](LICENSE.md) for full license details.
 
 ---
 
 <p align="center">
   <strong>Go outside. Find something weird. Let the Goblin judge it.</strong><br />
   <em>Touch grass. Find loot. 👹</em>
+</p>
+
+<p align="center">
+  <sub>Made with 💚 by GKV</sub>
 </p>

@@ -1,4 +1,4 @@
-# PROJECT_RULES.md — IRL Loot Goblin Mandatory Engineering Constraints
+# PROJECT_RULES.md - IRL Loot Goblin Mandatory Engineering Constraints
 
 This document defines the binding architectural, security, and quality rules for the **IRL Loot Goblin** project. All code and modifications must adhere strictly to these principles.
 

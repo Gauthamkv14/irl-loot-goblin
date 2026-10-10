@@ -1,4 +1,4 @@
-# IRL Loot Goblin — Updated MVP Build Guide
+# IRL Loot Goblin - Updated MVP Build Guide
 
 *Revision 2: Render hosting, server-side loot rolls, hardened AI pipeline. Replaces the original spec's architecture and build plan; product goals, tone and safety rules stay as written.*
 
@@ -53,7 +53,7 @@ loot-goblin/
 
 ## 4. Phase-by-phase build instructions
 
-### Phase 0 — Prep (30 minutes)
+### Phase 0 - Prep (30 minutes)
 
 **Do:**
 
@@ -67,7 +67,7 @@ loot-goblin/
 
 **Done when:** you have a model ID that accepts images, a key, and a folder of test photos.
 
-### Phase 1 — Prove the provider (45–60 minutes). Do this before any UI.
+### Phase 1 - Prove the provider (45–60 minutes). Do this before any UI.
 
 **Do:**
 
@@ -81,7 +81,7 @@ loot-goblin/
 
 **Done when:** a real photo goes in and sensible text about the photo comes out. If rate limits or vision support fail, switch to your backup model now, not later.
 
-### Phase 2 — Loot engine and AI pipeline (1.5–2 hours)
+### Phase 2 - Loot engine and AI pipeline (1.5–2 hours)
 
 **2a. Rarity and numbers (`server/loot.js`)**
 
@@ -138,7 +138,7 @@ Use the original suggested JSON schema, minus fields the server now controls. Th
 
 **Done when:** `curl -F image=@twig.jpg localhost:3000/api/appraise` returns valid, funny, validated JSON, and a broken-JSON case returns the fallback.
 
-### Phase 3 — First vertical slice in the UI (1.5 hours)
+### Phase 3 - First vertical slice in the UI (1.5 hours)
 
 Build only: **pick photo → resize → call API → render one loot card.**
 
@@ -157,7 +157,7 @@ Build only: **pick photo → resize → call API → render one loot card.**
 
 **Then: run the outdoor test now.** Walk outside for 10 minutes, phone in your pocket, photograph 5–8 real finds, and note what the model got right, funny, or wrong. Screenshot everything. Fix prompt problems before building more.
 
-### Phase 4 — Deploy to Render early (45 minutes)
+### Phase 4 - Deploy to Render early (45 minutes)
 
 Deploy the slice now so deployment problems surface early.
 
@@ -185,7 +185,7 @@ Deploy the slice now so deployment problems surface early.
 
 **Done when:** the live URL works end-to-end from your phone and the key appears nowhere in the client bundle or Git history.
 
-### Phase 5 — Hunts, inventory and polish (2 hours)
+### Phase 5 - Hunts, inventory and polish (2 hours)
 
 **Do:**
 
@@ -200,14 +200,14 @@ Deploy the slice now so deployment problems surface early.
 
 **Done when:** you can collect several items, refresh the page, and still see them.
 
-### Phase 6 — Hardening (1 hour)
+### Phase 6 - Hardening (1 hour)
 
 - Error states: network failure, timeout, 400 on bad file type, 429 rate limit, provider error. Each gets a friendly message and a retry.
 - Test: huge file, non-image file, blurry/dark photo, photo of a person, screenshot, photo of a plant or insect (the item text should stay hands-off and non-identifying).
 - Confirm the fallback item path works when you deliberately break the provider key.
 - Confirm no image or key appears in server logs.
 
-### Phase 7 — Nice-to-haves (only if Phases 1–6 are done)
+### Phase 7 - Nice-to-haves (only if Phases 1–6 are done)
 
 In this order:
 
@@ -218,7 +218,7 @@ In this order:
 
 Cut in reverse order if time is short.
 
-### Phase 8 — Demo and write-up (1–1.5 hours)
+### Phase 8 - Demo and write-up (1–1.5 hours)
 
 **Demo (60–90 s, use a real outdoor capture):** premise line → show a hunt → photograph an object outdoors → reveal → read the name and one absurd ability → add to inventory and show the count and coins → "Touch grass. Loot acquired." If a provider failure forces a sample item, label it a fallback.
 

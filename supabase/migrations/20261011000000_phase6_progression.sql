@@ -1,5 +1,5 @@
 -- ==============================================================================
--- IRL Loot Goblin — Phase 6: Progression, Quests & Achievements Schema & RLS
+-- IRL Loot Goblin - Phase 6: Progression, Quests & Achievements Schema & RLS
 -- Migration: 20261011000000_phase6_progression.sql
 -- ==============================================================================
 

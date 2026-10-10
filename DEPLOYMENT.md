@@ -1,4 +1,4 @@
-# DEPLOYMENT.md — IRL Loot Goblin Render Web Service Deployment Guide
+# DEPLOYMENT.md - IRL Loot Goblin Render Web Service Deployment Guide
 
 This guide documents the exact configuration required to deploy **IRL Loot Goblin** to [Render](https://render.com) as a single, unified Node.js Web Service serving both the Express API and the built React frontend.
 
@@ -60,8 +60,10 @@ Configure the following environment variables in the Render Dashboard (**Dashboa
 3. Apply the migrations in sequence:
    - `supabase/migrations/20261010000000_initial_schema.sql` (Phase 5 base schema & profiles trigger)
    - `supabase/migrations/20261011000000_phase6_progression.sql` (Phase 6 base progression tables)
+   - `supabase/migrations/20261011010000_progression_security_remediation.sql` (Phase 6 direct write privilege revocation)
    - `supabase/migrations/20261011020000_private_rpc_security_remediation.sql` (Private schema `goblin_internal` & atomic progression RPC)
    - `supabase/migrations/20261011030000_phase7_leaderboards_and_trading.sql` (Phase 7 public profiles, leaderboard view, trade tables, and trading RPCs)
+   - `supabase/migrations/20261011040000_fix_trade_offers_permissions.sql` (Phase 7 market trading table read/write permissions fix)
 4. Verify that:
    - `public.profiles` and `public.loot_items` tables are created with Row Level Security (RLS) enabled.
    - `profiles` contains `is_public` (defaulting to false) and `public_title`.

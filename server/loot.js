@@ -1,5 +1,5 @@
 /**
- * server/loot.js — Server-authoritative loot tables and stat generation
+ * server/loot.js - Server-authoritative loot tables and stat generation
  * 
  * Rules:
  * - Rarity weights: Common (45), Uncommon (28), Rare (16), Epic (8), Legendary (3)

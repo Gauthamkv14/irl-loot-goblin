@@ -1,4 +1,4 @@
-# BUILD_PLAN.md — IRL Loot Goblin Phased Implementation Plan
+# BUILD_PLAN.md - IRL Loot Goblin Phased Implementation Plan
 
 ## 1. Architecture & Core User Journey Summary
 

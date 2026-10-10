@@ -1,5 +1,5 @@
 -- ==============================================================================
--- IRL Loot Goblin — Fix Market Permissions: Grant Select on Trading Tables
+-- IRL Loot Goblin - Fix Market Permissions: Grant Select on Trading Tables
 -- Migration: 20261011040000_fix_trade_offers_permissions.sql
 -- ==============================================================================
 

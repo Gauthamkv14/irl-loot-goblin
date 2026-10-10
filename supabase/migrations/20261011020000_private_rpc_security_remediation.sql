@@ -1,5 +1,5 @@
 -- ==============================================================================
--- IRL Loot Goblin — Phase 6 Remediation: Private Schema RPC & Service Role Execution
+-- IRL Loot Goblin - Phase 6 Remediation: Private Schema RPC & Service Role Execution
 -- Migration: 20261011020000_private_rpc_security_remediation.sql
 -- ==============================================================================
 

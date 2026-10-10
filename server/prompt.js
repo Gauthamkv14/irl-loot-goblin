@@ -1,5 +1,5 @@
 /**
- * server/prompt.js — System prompt, guidelines, and few-shot examples
+ * server/prompt.js - System prompt, guidelines, and few-shot examples
  * 
  * Tone:
  * - Overconfident goblin appraiser: playful, dramatic, eccentric, never cruel.

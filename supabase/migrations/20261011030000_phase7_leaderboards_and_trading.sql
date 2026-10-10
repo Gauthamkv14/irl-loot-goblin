@@ -1,5 +1,5 @@
 -- ==============================================================================
--- IRL Loot Goblin — Phase 7: Public Profiles, Leaderboards & Trading Outpost
+-- IRL Loot Goblin - Phase 7: Public Profiles, Leaderboards & Trading Outpost
 -- Migration: 20261011030000_phase7_leaderboards_and_trading.sql
 -- ==============================================================================
 

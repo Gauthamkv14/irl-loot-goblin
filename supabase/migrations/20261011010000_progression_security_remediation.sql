@@ -1,5 +1,5 @@
 -- ==============================================================================
--- IRL Loot Goblin — Phase 6 Remediation: Atomic Hoarding & Client Write Revocation
+-- IRL Loot Goblin - Phase 6 Remediation: Atomic Hoarding & Client Write Revocation
 -- Migration: 20261011010000_progression_security_remediation.sql
 -- ==============================================================================
 

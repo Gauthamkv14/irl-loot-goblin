@@ -1,5 +1,5 @@
 -- ==============================================================================
--- IRL Loot Goblin — Phase 5: Initial Schema & RLS Policies
+-- IRL Loot Goblin - Phase 5: Initial Schema & RLS Policies
 -- Migration: 20261010000000_initial_schema.sql
 -- ==============================================================================
 
