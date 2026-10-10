@@ -164,6 +164,18 @@ assert(sqlFixLootPerms.includes('REVOKE INSERT, UPDATE, DELETE ON public.loot_it
 assert(sqlFixLootPerms.includes('GRANT INSERT, UPDATE, DELETE ON public.loot_items TO service_role;'), 'loot_items service_role mutation grant missing');
 console.log('✓ Loot items permissions fix migration verified (SELECT granted under RLS, mutations locked to service_role).');
 
+// 1h. Verify Leaderboard Security Invoker Fix Migration (20261011060000_fix_leaderboard_security_invoker.sql)
+console.log('1h. Verifying Leaderboard Security Invoker Fix migration...');
+const migrationPathFixLeaderboardInvoker = path.resolve(__dirname, '../supabase/migrations/20261011060000_fix_leaderboard_security_invoker.sql');
+assert(fs.existsSync(migrationPathFixLeaderboardInvoker), 'Leaderboard invoker fix migration file not found');
+const sqlFixLeaderboardInvoker = fs.readFileSync(migrationPathFixLeaderboardInvoker, 'utf8');
+
+assert(sqlFixLeaderboardInvoker.includes('CREATE OR REPLACE VIEW public.public_leaderboard_view'), 'public_leaderboard_view definition missing in invoker migration');
+assert(sqlFixLeaderboardInvoker.includes('security_invoker = true'), 'security_invoker = true setting missing in invoker migration');
+assert(sqlFixLeaderboardInvoker.includes('WHERE p.is_public = true'), 'is_public filter missing in invoker migration');
+assert(sqlFixLeaderboardInvoker.includes('GRANT SELECT ON public.public_leaderboard_view TO anon, authenticated, service_role;'), 'SELECT grant missing in invoker migration');
+console.log('✓ Leaderboard security invoker fix migration verified (security_invoker = true enabled, RLS honored).');
+
 // 2. Verify Client Graceful Fallback When Unconfigured
 console.log('2. Verifying client configuration fallback when env vars are unconfigured...');
 // Simulate unconfigured state

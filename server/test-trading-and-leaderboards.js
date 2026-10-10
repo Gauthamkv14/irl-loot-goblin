@@ -61,7 +61,17 @@ const serverIndex = fs.readFileSync(serverIndexPath, 'utf8');
 
 // Endpoints exist
 assert(serverIndex.includes("app.post('/api/profile/privacy'"), 'Privacy update route missing');
+// Leaderboard service role client and security invoker verification
 assert(serverIndex.includes("app.get('/api/leaderboards'"), 'Leaderboards route missing');
+const lbHandlerCode = serverIndex.substring(serverIndex.indexOf("app.get('/api/leaderboards'"), serverIndex.indexOf("app.get('/api/trades/offers'"));
+assert(lbHandlerCode.includes("serviceRoleKey"), 'Leaderboards route must use serviceRoleKey for secure querying under security_invoker = true');
+
+const invokerMigrationPath = path.resolve(__dirname, '../supabase/migrations/20261011060000_fix_leaderboard_security_invoker.sql');
+assert(fs.existsSync(invokerMigrationPath), 'Leaderboard invoker migration missing');
+const invokerSql = fs.readFileSync(invokerMigrationPath, 'utf8');
+assert(invokerSql.includes('security_invoker = true'), 'security_invoker = true missing in migration');
+
+// Trade endpoints exist
 assert(serverIndex.includes("app.get('/api/trades/offers'"), 'Get trade offers route missing');
 assert(serverIndex.includes("app.post('/api/trades/offers'"), 'Create trade offer route missing');
 assert(serverIndex.includes("app.post('/api/trades/execute'"), 'Execute trade route missing');
