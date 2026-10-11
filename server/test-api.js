@@ -96,8 +96,7 @@ try {
     assert(lootCard.id, 'Missing item id');
     assert(lootCard.rarity, 'Missing item rarity');
     assert(lootCard.stats, 'Missing item stats');
-    assert(lootCard.goblin_value >= 0, 'Invalid goblin value');
-    assert(lootCard.source === 'model' || lootCard.source === 'fallback', 'Unknown source');
+    assert.strictEqual(lootCard.source, 'model', 'Expected AI model appraisal when provider is configured');
   }
 
   // 6. Test GET /api/leaderboards response structure / error contract

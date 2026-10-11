@@ -42,7 +42,7 @@ export function containsSafetyViolation(text) {
 /**
  * Call the OpenAI-compatible provider with the image and prompt
  */
-async function callProvider(messages, config, timeoutMs = 45000) {
+export async function callProvider(messages, config, timeoutMs = 45000) {
   const { baseUrl, apiKey, modelId } = config;
   const endpoint = `${baseUrl.replace(/\/+$/, '')}/chat/completions`;
 
@@ -134,17 +134,19 @@ export async function appraisePhoto(dataUrl, huntPrompt = null, config) {
       parsedJson = validated.data;
     } else {
       validationError = validated.error.message;
+      console.warn(`[Appraiser] Model response validation failed: ${validationError}`);
     }
   } catch (err) {
     validationError = err.message;
+    console.error(`[Appraiser] Provider call failed: ${err.message}`);
   }
 
-  // Attempt 2: One controlled repair retry if validation or parsing failed
-  if (!parsedJson) {
+  // Attempt 2: One controlled repair retry if validation or parsing failed and initial output was received
+  if (!parsedJson && rawOutput) {
     try {
       const repairMessages = [
         ...initialMessages,
-        { role: 'assistant', content: rawOutput || '{"error": "invalid format"}' },
+        { role: 'assistant', content: rawOutput },
         {
           role: 'user',
           content: `Your previous response was not valid JSON conforming to the schema (Error: ${validationError || 'Unparseable JSON'}). Please return ONLY a valid JSON object matching the required schema with all fields populated.`
@@ -158,14 +160,22 @@ export async function appraisePhoto(dataUrl, huntPrompt = null, config) {
 
       if (repairValidated.success) {
         parsedJson = repairValidated.data;
+      } else {
+        console.warn(`[Appraiser] Repair retry validation failed: ${repairValidated.error.message}`);
       }
     } catch (retryErr) {
-      // Repair retry failed, proceed to fallback
+      console.error(`[Appraiser] Repair retry provider call failed: ${retryErr.message}`);
     }
   }
 
   // If both attempts failed or safety violation detected, return labelled fallback
-  if (!parsedJson || containsSafetyViolation(`${parsedJson.lore} ${parsedJson.ability_description}`)) {
+  if (!parsedJson) {
+    console.warn(`[Appraiser] Falling back to demo appraisal: model output unavailable or invalid.`);
+    return fallbackItem(roll);
+  }
+
+  if (containsSafetyViolation(`${parsedJson.lore} ${parsedJson.ability_description}`)) {
+    console.warn(`[Appraiser] Falling back to demo appraisal: safety violation detected in narrative.`);
     return fallbackItem(roll);
   }
 

@@ -10,7 +10,8 @@
     "test": "node test-unit.js && node test-api.js",
     "test:unit": "node test-unit.js",
     "test:api": "node test-api.js",
-    "test:provider": "node test-call.js"
+    "test:provider": "node test-call.js",
+    "test:guardrails": "node test-guardrails.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

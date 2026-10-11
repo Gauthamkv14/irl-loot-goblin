@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { appraisePhoto } from './appraise.js';
+import { checkOutdoorEligibility } from './eligibility.js';
 import { fallbackItem, LootCardSchema } from './schema.js';
 import { rollLoot } from './loot.js';
 import { verifyLootSignature, getSigningSecret } from './auth.js';
@@ -169,6 +170,7 @@ app.post('/api/appraise', appraiseLimiter, (req, res, next) => {
 
   // If provider credentials are missing, seamlessly return deterministic fallback
   if (!config) {
+    console.warn('[Appraiser] Provider configuration missing from environment, returning demo fallback.');
     const fallback = fallbackItem(rollLoot());
     return res.json(fallback);
   }
@@ -176,11 +178,27 @@ app.post('/api/appraise', appraiseLimiter, (req, res, next) => {
   // Convert uploaded buffer to base64 data URL
   const dataUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
 
+  // Strict Server-Side Outdoor Eligibility Gate:
+  // Verifies authentic outdoor natural find BEFORE loot generation, narrative appraisal, or HMAC signing
+  const eligibility = await checkOutdoorEligibility(dataUrl, config);
+  if (!eligibility.eligible) {
+    console.warn(`[Appraiser] Rejected ineligible upload: ${eligibility.reason || 'Not an outdoor natural find'}`);
+    return res.status(422).json({
+      error: eligibility.userMessage || 'The goblin appraiser sniffs suspiciously: this does not look like an authentic outdoor natural find! Only genuine wild discoveries (plants, rocks, fungi, trees) can be appraised as relics.',
+      code: 'INELIGIBLE_OBJECT',
+      details: {
+        subject: eligibility.subject || 'unidentified object',
+        reason: eligibility.reason || 'Item is not an authentic outdoor natural find'
+      }
+    });
+  }
+
   try {
     const item = await appraisePhoto(dataUrl, huntPrompt, config);
     return res.json(item);
   } catch (err) {
     // If an unhandled failure occurred in appraisePhoto, return a safe fallback item
+    console.error('[Appraiser] Unhandled exception in appraisePhoto:', err.message);
     const fallback = fallbackItem(rollLoot());
     return res.json(fallback);
   }
